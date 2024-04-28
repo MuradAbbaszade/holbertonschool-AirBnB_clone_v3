@@ -18,8 +18,12 @@ def get_users():
 def create_user():
     """Create a new user"""
     request_body = request.get_json(silent=True)
-    if not request_body or "email" not in request_body or "password" not in request_body:
+    if not request_body:
         abort(400, "Bad request")
+    if "email" not in request_body:
+        abort(400, "Missing email")
+    if "password" not in request_body:
+        abort(400, "Missing password")
     user = User(**request_body)
     user.save()
     return jsonify(user.to_dict()), 201
