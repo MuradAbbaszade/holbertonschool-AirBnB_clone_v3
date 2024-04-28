@@ -56,7 +56,11 @@ def create_state():
     return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
+@app_views.route(
+    "/states/<state_id>",
+    methods=["GET"],
+    strict_slashes=False
+)
 def get_state(state_id):
     """get state by id"""
     if request.method == "GET":
