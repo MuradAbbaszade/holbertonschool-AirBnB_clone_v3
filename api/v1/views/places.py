@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""API"""
+0;10;1c"""API"""
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
@@ -80,5 +80,4 @@ def update_place(place_id):
         if key not in ["id", "user_id", "city_id", "created_at", "updated_at"]:
             setattr(place, key, value)
     storage.save()
-
     return jsonify(place.to_dict()), 200
