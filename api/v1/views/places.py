@@ -50,7 +50,7 @@ def create_place_in_city(city_id):
 def get_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
-        abort(404)  
+        abort(404)
     return jsonify(place.to_dict())
 
 
