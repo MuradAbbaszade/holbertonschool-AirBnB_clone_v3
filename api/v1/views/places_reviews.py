@@ -7,6 +7,7 @@ from models.place import Place
 from models.user import User
 from models.review import Review
 
+
 @app_views.route(
     "/places/<place_id>/reviews",
     methods=["GET"],
@@ -23,6 +24,7 @@ def get_reviews_by_place(place_id):
 
     review_list = [review.to_dict() for review in place_obj.reviews]
     return jsonify(review_list)
+
 
 @app_views.route(
     "/places/<place_id>/reviews",
@@ -52,6 +54,7 @@ def create_review(place_id):
 
     return jsonify(new_review.to_dict()), 201
 
+
 @app_views.route(
     "/reviews/<review_id>",
     methods=["GET"],
@@ -67,6 +70,7 @@ def get_review(review_id):
         abort(404)
 
     return jsonify(review_obj.to_dict())
+
 
 @app_views.route(
     "/reviews/<review_id>",
@@ -87,6 +91,7 @@ def delete_review(review_id):
 
     return jsonify({}), 200
 
+
 @app_views.route(
     "/reviews/<review_id>",
     methods=["PUT"],
@@ -105,7 +110,9 @@ def update_review(review_id):
         abort(400, "Not a JSON")
 
     for key, value in request_body.items():
-        if key not in ["id", "user_id", "place_id", "created_at", "updated_at"]:
+        if key not in [
+                "id", "user_id", "place_id", "created_at", "updated_at"
+        ]:
             setattr(review_obj, key, value)
 
     storage.save()
