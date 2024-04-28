@@ -8,7 +8,11 @@ from models.place import Place
 from models.user import User
 
 
-@app_views.route("/cities/<city_id>/places", methods=["GET"], strict_slashes=False)
+@app_views.route(
+    "/cities/<city_id>/places",
+    methods=["GET"],
+    strict_slashes=False
+)
 def get_places_by_city(city_id):
     city = storage.get(City, city_id)
     if city is None:
@@ -18,22 +22,30 @@ def get_places_by_city(city_id):
     return jsonify(place_list)
 
 
-@app_views.route("/cities/<city_id>/places", methods=["POST"], strict_slashes=False)
+@app_views.route(
+    "/cities/<city_id>/places",
+    methods=["POST"],
+    strict_slashes=False
+)
 def create_place_in_city(city_id):
-    city = storage.get(City, city_id)
-    if city is None:
-        abort(404)
-    
-    request_data = request.get_json(silent=True)
-    if not request_data or "name" not in request_data or "user_id" not in request_data:
-        abort(400, "Bad request")
+    request_body = request.get_json(silent=True)
+    city_obj = storage.get(City, city_id)
 
-    user = storage.get(User, request_data["user_id"])
+    if city_obj is None:
+        abort(404)
+    elif not request_body:
+        abort(400, "Not a JSON")
+    elif "name" not in request_body:
+        abort(400, "Missing name")
+    elif "user_id" not in request_body:
+        abort(400, "Missing user_id")
+
+    user = storage.get(User, request_body["user_id"])
     if user is None:
         abort(404)
 
-    request_data["city_id"] = city_id
-    new_place = Place(**request_data)
+    request_body["city_id"] = city_id
+    new_place = Place(**request_body)
     new_place.save()
 
     return jsonify(new_place.to_dict()), 201
@@ -48,7 +60,11 @@ def get_place(place_id):
     return jsonify(place.to_dict())
 
 
-@app_views.route("/places/<place_id>", methods=["DELETE"], strict_slashes=False)
+@app_views.route(
+    "/places/<place_id>",
+    methods=["DELETE"],
+    strict_slashes=False
+)
 def delete_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
